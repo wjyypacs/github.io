@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息 - 公共卫生继续医学教育网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --points-color: #ff6b35;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-text);
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+        
+        /* 用户积分显示 */
+        .user-points {
+            background-color: var(--points-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-points:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* 页面标题样式 */
+        .page-header {
+            background: linear-gradient(rgba(13, 110, 253, 0.8), rgba(13, 110, 253, 0.8)), url('https://picsum.photos/seed/profile/1200/300.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        
+        /* 个人资料卡片 */
+        .profile-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 25px;
+            border: 4px solid var(--light-bg);
+        }
+        
+        .profile-info h3 {
+            margin-bottom: 5px;
+        }
+        
+        .profile-info p {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        
+        .profile-actions {
+            margin-top: 15px;
+        }
+        
+        .profile-actions .btn {
+            margin-right: 10px;
+        }
+        
+        /* 表单样式 */
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        /* 标签页样式 */
+        .profile-tabs {
+            margin-bottom: 30px;
+        }
+        
+        .profile-tabs .nav-link {
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+        
+        .profile-tabs .nav-link.active {
+            color: var(--primary-color);
+            background-color: transparent;
+            border-bottom: 3px solid var(--primary-color);
+            border-radius: 0;
+        }
+        
+        /* 安全设置卡片 */
+        .security-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .security-item:last-child {
+            border-bottom: none;
+        }
+        
+        .security-info h5 {
+            margin-bottom: 5px;
+        }
+        
+        .security-info p {
+            color: var(--secondary-color);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        /* 通知设置卡片 */
+        .notification-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-info h5 {
+            margin-bottom: 5px;
+        }
+        
+        .notification-info p {
+            color: var(--secondary-color);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        
+        footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: white;
+        }
+        
+        /* 积分提示框 */
+        .points-tooltip {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 15px;
+            width: 250px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .points-tooltip.show {
+            display: block;
+        }
+        
+        .points-tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .points-tooltip-title {
+            font-weight: bold;
+            color: var(--points-color);
+        }
+        
+        .points-tooltip-close {
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+        
+        .points-tooltip-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .points-tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .points-tooltip-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        /* 开关样式 */
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-pulse-fill"></i> 公共卫生继续医学教育网
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">课程中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learning.html">在线学习</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credits.html">学分管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="points-mall.html">积分商城</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">学术资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experts.html">专家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practice.html">实践基地</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="international.html">国际交流</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            个人中心
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item active" href="profile.html">个人信息</a></li>
+                            <li><a class="dropdown-item" href="points.html">我的积分</a></li>
+                            <li><a class="dropdown-item" href="learning-record.html">学习记录</a></li>
+                            <li><a class="dropdown-item" href="certificates.html">证书管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <div class="position-relative">
+                            <span class="user-points" id="userPointsDisplay">
+                                <i class="bi bi-coin"></i> 1280积分
+                            </span>
+                            <div class="points-tooltip" id="pointsTooltip">
+                                <div class="points-tooltip-header">
+                                    <span class="points-tooltip-title">积分明细</span>
+                                    <span class="points-tooltip-close" id="closePointsTooltip"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>今日获得</span>
+                                    <span class="text-success">+50</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本周获得</span>
+                                    <span class="text-success">+200</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本月获得</span>
+                                    <span class="text-success">+450</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>年度赠送</span>
+                                    <span class="text-success">+900</span>
+                                </div>
+                                <a href="points.html" class="points-tooltip-link">查看全部积分记录</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">个人信息</h1>
+            <p class="lead">管理您的个人资料和账户设置</p>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 个人资料卡片 -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <img src="https://picsum.photos/seed/avatar/200/200.jpg" class="profile-avatar" alt="用户头像">
+                <div class="profile-info">
+                    <h3>张医生</h3>
+                    <p>北京市疾病预防控制中心 · 主任医师</p>
+                    <p>注册时间：2024-03-15</p>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary" onclick="document.getElementById('avatarInput').click()">
+                            <i class="bi bi-camera"></i> 更换头像
+                        </button>
+                        <input type="file" id="avatarInput" style="display: none;" onchange="alert('头像上传成功！')">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页导航 -->
+        <ul class="nav nav-tabs profile-tabs" id="profileTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button">基本信息</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="professional-tab" data-bs-toggle="tab" data-bs-target="#professional" type="button">职业信息</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button">安全设置</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notification-tab" data-bs-toggle="tab" data-bs-target="#notification" type="button">通知设置</button>
+            </li>
+        </ul>
+
+        <!-- 标签内容 -->
+        <div class="tab-content" id="profileTabsContent">
+            <!-- 基本信息 -->
+            <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                <div class="profile-card">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">姓名</label>
+                                <input type="text" class="form-control" id="name" value="张医生">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="gender" class="form-label">性别</label>
+                                <select class="form-select" id="gender">
+                                    <option selected>男</option>
+                                    <option>女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="idcard" class="form-label">身份证号</label>
+                                <input type="text" class="form-control" id="idcard" value="110101198001011234" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="birthday" class="form-label">出生日期</label>
+                                <input type="date" class="form-control" id="birthday" value="1980-01-01">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">手机号</label>
+                                <input type="tel" class="form-control" id="phone" value="13800138000">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">电子邮箱</label>
+                                <input type="email" class="form-control" id="email" value="zhangys@example.com">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">通讯地址</label>
+                            <input type="text" class="form-control" id="address" value="北京市海淀区公共卫生学院路100号">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">个人简介</label>
+                            <textarea class="form-control" id="bio" rows="3">北京市疾病预防控制中心主任医师，从事传染病防控工作20余年，擅长新发传染病防控策略研究。</textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="alert('基本信息保存成功！')">保存修改</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 职业信息 -->
+            <div class="tab-pane fade" id="professional" role="tabpanel">
+                <div class="profile-card">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="organization" class="form-label">工作单位</label>
+                                <input type="text" class="form-control" id="organization" value="北京市疾病预防控制中心">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="department" class="form-label">所在科室</label>
+                                <input type="text" class="form-control" id="department" value="传染病预防控制所">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="position" class="form-label">职务</label>
+                                <input type="text" class="form-control" id="position" value="主任医师">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="title" class="form-label">职称</label>
+                                <input type="text" class="form-control" id="title" value="主任医师">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="license" class="form-label">医师执业证书编号</label>
+                                <input type="text" class="form-control" id="license" value="110110198001010123">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="experience" class="form-label">工作年限</label>
+                                <input type="number" class="form-control" id="experience" value="20">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="education" class="form-label">最高学历</label>
+                                <select class="form-select" id="education">
+                                    <option>博士研究生</option>
+                                    <option selected>硕士研究生</option>
+                                    <option>本科</option>
+                                    <option>大专</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="major" class="form-label">专业</label>
+                                <input type="text" class="form-control" id="major" value="流行病学">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skills" class="form-label">专业技能</label>
+                            <input type="text" class="form-control" id="skills" value="传染病防控, 流行病学调查, 应急处置">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="alert('职业信息保存成功！')">保存修改</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 安全设置 -->
+            <div class="tab-pane fade" id="security" role="tabpanel">
+                <div class="security-card">
+                    <h4 class="mb-4">账户安全</h4>
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h5>登录密码</h5>
+                            <p>定期更换密码，确保账户安全</p>
+                        </div>
+                        <button class="btn btn-outline-primary" onclick="alert('正在跳转到密码修改页面...')">修改密码</button>
+                    </div>
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h5>手机绑定</h5>
+                            <p>已绑定：138****8000</p>
+                        </div>
+                        <button class="btn btn-outline-primary" onclick="alert('正在跳转到手机绑定页面...')">更换手机</button>
+                    </div>
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h5>邮箱绑定</h5>
+                            <p>已绑定：zhang***@example.com</p>
+                        </div>
+                        <button class="btn btn-outline-primary" onclick="alert('正在跳转到邮箱绑定页面...')">更换邮箱</button>
+                    </div>
+                </div>
+                
+                <div class="security-card">
+                    <h4 class="mb-4">登录保护</h4>
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h5>双重验证</h5>
+                            <p>开启后，登录时需要手机验证码</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="twoFactor">
+                            <label class="form-check-label" for="twoFactor">未开启</label>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h5>登录提醒</h5>
+                            <p>在新设备登录时，发送提醒通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="loginAlert" checked>
+                            <label class="form-check-label" for="loginAlert">已开启</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 通知设置 -->
+            <div class="tab-pane fade" id="notification" role="tabpanel">
+                <div class="notification-card">
+                    <h4 class="mb-4">通知偏好</h4>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>课程通知</h5>
+                            <p>新课程上线、课程更新等通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="courseNotice" checked>
+                            <label class="form-check-label" for="courseNotice">已开启</label>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>活动通知</h5>
+                            <p>线上活动、线下培训等活动通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="activityNotice" checked>
+                            <label class="form-check-label" for="activityNotice">已开启</label>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>积分通知</h5>
+                            <p>积分获取、消费等变动通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="pointsNotice" checked>
+                            <label class="form-check-label" for="pointsNotice">已开启</label>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>系统通知</h5>
+                            <p>系统维护、重要公告等通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="systemNotice" checked>
+                            <label class="form-check-label" for="systemNotice">已开启</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notification-card">
+                    <h4 class="mb-4">通知方式</h4>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>站内信</h5>
+                            <p>通过网站内部消息发送通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="siteMessage" checked>
+                            <label class="form-check-label" for="siteMessage">已开启</label>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>邮件通知</h5>
+                            <p>通过电子邮件发送通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="emailNotice">
+                            <label class="form-check-label" for="emailNotice">未开启</label>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h5>短信通知</h5>
+                            <p>通过手机短信发送通知</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="smsNotice">
+                            <label class="form-check-label" for="smsNotice">未开启</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>公共卫生继续医学教育网是经国家卫生健康委员会批准成立的全国性公共卫生继续医学教育网络培训平台，致力于提升公共卫生人才队伍素质和能力。</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html">首页</a></li>
+                        <li class="mb-2"><a href="courses.html">课程中心</a></li>
+                        <li class="mb-2"><a href="learning.html">在线学习</a></li>
+                        <li class="mb-2"><a href="credits.html">学分管理</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>积分中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="points-mall.html">积分商城</a></li>
+                        <li class="mb-2"><a href="points.html">我的积分</a></li>
+                        <li class="mb-2"><a href="points-rules.html">积分规则</a></li>
+                        <li class="mb-2"><a href="points-recharge.html">积分充值</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="bi bi-geo-alt me-2"></i> 北京市海淀区公共卫生学院路100号</p>
+                    <p><i class="bi bi-telephone me-2"></i> 010-12345678</p>
+                    <p><i class="bi bi-envelope me-2"></i> contact@phe-cme.edu.cn</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="订阅我们的资讯">
+                            <button class="btn btn-primary" type="button">订阅</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center py-3">
+                <p class="mb-0">© 2025 公共卫生继续医学教育网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+
+            // 积分提示框显示/隐藏
+            const userPointsDisplay = document.getElementById('userPointsDisplay');
+            const pointsTooltip = document.getElementById('pointsTooltip');
+            const closePointsTooltip = document.getElementById('closePointsTooltip');
+
+            userPointsDisplay.addEventListener('click', function() {
+                pointsTooltip.classList.toggle('show');
+            });
+
+            closePointsTooltip.addEventListener('click', function() {
+                pointsTooltip.classList.remove('show');
+            });
+
+            // 点击页面其他地方关闭提示框
+            document.addEventListener('click', function(event) {
+                if (!userPointsDisplay.contains(event.target) && !pointsTooltip.contains(event.target)) {
+                    pointsTooltip.classList.remove('show');
+                }
+            });
+
+            // 订阅表单提交
+            const subscribeBtn = document.querySelector('footer .input-group button');
+            subscribeBtn.addEventListener('click', function() {
+                const emailInput = document.querySelector('footer .input-group input');
+                if (emailInput.value) {
+                    alert('订阅成功！感谢您的关注。');
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

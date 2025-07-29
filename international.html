@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国际交流 - 公共卫生继续医学教育网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --points-color: #ff6b35;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-text);
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+        
+        /* 用户积分显示 */
+        .user-points {
+            background-color: var(--points-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-points:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* 页面标题样式 */
+        .page-header {
+            background: linear-gradient(rgba(13, 110, 253, 0.8), rgba(13, 110, 253, 0.8)), url('https://picsum.photos/seed/international/1200/300.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        
+        /* 国际交流分类导航 */
+        .exchange-nav {
+            margin-bottom: 30px;
+        }
+        
+        .exchange-nav-item {
+            padding: 15px 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .exchange-nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,.15);
+        }
+        
+        .exchange-nav-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .exchange-nav-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .exchange-nav-item.active .exchange-nav-icon {
+            color: white;
+        }
+        
+        /* 合作项目卡片 */
+        .project-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+            height: 100%;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .project-img {
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .project-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .project-content {
+            padding: 20px;
+        }
+        
+        .project-name {
+            font-weight: 500;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .project-country {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .project-country i {
+            margin-right: 5px;
+        }
+        
+        .project-desc {
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .project-field {
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .project-duration {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        /* 学术会议卡片 */
+        .conference-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+            height: 100%;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+        
+        .conference-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .conference-img {
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .conference-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--info-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .conference-content {
+            padding: 20px;
+        }
+        
+        .conference-name {
+            font-weight: 500;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .conference-date {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .conference-date i {
+            margin-right: 5px;
+        }
+        
+        .conference-desc {
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .conference-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .conference-location {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        .conference-status {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        /* 筛选区域 */
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        /* 分页样式 */
+        .pagination {
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .page-link {
+            color: var(--primary-color);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        
+        footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: white;
+        }
+        
+        /* 积分提示框 */
+        .points-tooltip {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 15px;
+            width: 250px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .points-tooltip.show {
+            display: block;
+        }
+        
+        .points-tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .points-tooltip-title {
+            font-weight: bold;
+            color: var(--points-color);
+        }
+        
+        .points-tooltip-close {
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+        
+        .points-tooltip-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .points-tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .points-tooltip-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-pulse-fill"></i> 公共卫生继续医学教育网
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">课程中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learning.html">在线学习</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credits.html">学分管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="points-mall.html">积分商城</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">学术资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experts.html">专家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practice.html">实践基地</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="international.html">国际交流</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            个人中心
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人信息</a></li>
+                            <li><a class="dropdown-item" href="points.html">我的积分</a></li>
+                            <li><a class="dropdown-item" href="learning-record.html">学习记录</a></li>
+                            <li><a class="dropdown-item" href="certificates.html">证书管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <div class="position-relative">
+                            <span class="user-points" id="userPointsDisplay">
+                                <i class="bi bi-coin"></i> 1280积分
+                            </span>
+                            <div class="points-tooltip" id="pointsTooltip">
+                                <div class="points-tooltip-header">
+                                    <span class="points-tooltip-title">积分明细</span>
+                                    <span class="points-tooltip-close" id="closePointsTooltip"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>今日获得</span>
+                                    <span class="text-success">+50</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本周获得</span>
+                                    <span class="text-success">+200</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本月获得</span>
+                                    <span class="text-success">+450</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>年度赠送</span>
+                                    <span class="text-success">+900</span>
+                                </div>
+                                <a href="points.html" class="points-tooltip-link">查看全部积分记录</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">国际交流</h1>
+            <p class="lead">拓展国际视野，促进全球公共卫生合作</p>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 国际交流分类导航 -->
+        <div class="row exchange-nav">
+            <div class="col-md-3 col-sm-6">
+                <div class="exchange-nav-item active" onclick="filterExchange('all')">
+                    <i class="bi bi-globe exchange-nav-icon"></i>
+                    <div>全部项目</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="exchange-nav-item" onclick="filterExchange('cooperation')">
+                    <i class="bi bi-handshake exchange-nav-icon"></i>
+                    <div>国际合作</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="exchange-nav-item" onclick="filterExchange('conference')">
+                    <i class="bi bi-calendar-event exchange-nav-icon"></i>
+                    <div>学术会议</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="exchange-nav-item" onclick="filterExchange('exchange')">
+                    <i class="bi bi-people exchange-nav-icon"></i>
+                    <div>人才交流</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 筛选区域 -->
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">项目类型</label>
+                    <select class="form-select">
+                        <option selected>全部类型</option>
+                        <option>国际合作</option>
+                        <option>学术会议</option>
+                        <option>人才交流</option>
+                        <option>培训项目</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">所在地区</label>
+                    <select class="form-select">
+                        <option selected>全部地区</option>
+                        <option>北美洲</option>
+                        <option>欧洲</option>
+                        <option>亚洲</option>
+                        <option>大洋洲</option>
+                        <option>南美洲</option>
+                        <option>非洲</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">项目状态</label>
+                    <select class="form-select">
+                        <option selected>全部状态</option>
+                        <option>进行中</option>
+                        <option>即将开始</option>
+                        <option>已结束</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 mb-3">
+                    <label class="form-label">关键词搜索</label>
+                    <input type="text" class="form-control" placeholder="输入项目名称或关键词">
+                </div>
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+                    <button class="btn btn-primary w-100">搜索</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 国际合作项目 -->
+        <h4 class="mb-4">国际合作项目</h4>
+        <div class="row" id="cooperationList">
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card" onclick="showProjectDetails('中美新发传染病防控合作项目')">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/seed/project1/400/180.jpg" class="project-img w-100" alt="合作项目图片">
+                        <span class="project-type">国际合作</span>
+                    </div>
+                    <div class="project-content">
+                        <h5 class="project-name">中美新发传染病防控合作项目</h5>
+                        <p class="project-country"><i class="bi bi-geo-alt"></i> 美国</p>
+                        <p class="project-desc">与美国疾控中心合作，共同开展新发传染病监测、预警和防控技术研究，提升两国应对突发公共卫生事件的能力。</p>
+                        <div class="project-meta">
+                            <span class="project-field">传染病防控</span>
+                            <span class="project-duration">2023-2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card" onclick="showProjectDetails('中欧环境健康风险评估合作项目')">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/seed/project2/400/180.jpg" class="project-img w-100" alt="合作项目图片">
+                        <span class="project-type">国际合作</span>
+                    </div>
+                    <div class="project-content">
+                        <h5 class="project-name">中欧环境健康风险评估合作项目</h5>
+                        <p class="project-country"><i class="bi bi-geo-alt"></i> 欧盟</p>
+                        <p class="project-desc">与欧盟环境健康研究中心合作，共同研究环境污染物对人群健康的影响，开发环境健康风险评估工具。</p>
+                        <div class="project-meta">
+                            <span class="project-field">环境卫生</span>
+                            <span class="project-duration">2022-2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card" onclick="showProjectDetails('中国-东盟公共卫生应急能力建设项目')">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/seed/project3/400/180.jpg" class="project-img w-100" alt="合作项目图片">
+                        <span class="project-type">国际合作</span>
+                    </div>
+                    <div class="project-content">
+                        <h5 class="project-name">中国-东盟公共卫生应急能力建设项目</h5>
+                        <p class="project-country"><i class="bi bi-geo-alt"></i> 东盟</p>
+                        <p class="project-desc">与东盟国家合作，共同提升区域内公共卫生应急响应能力，建立联防联控机制，共同应对突发公共卫生事件。</p>
+                        <div class="project-meta">
+                            <span class="project-field">应急管理</span>
+                            <span class="project-duration">2021-2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学术会议 -->
+        <h4 class="mb-4 mt-5">国际学术会议</h4>
+        <div class="row" id="conferenceList">
+            <div class="col-lg-4 col-md-6">
+                <div class="conference-card" onclick="showConferenceDetails('世界公共卫生大会')">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/seed/conference1/400/180.jpg" class="conference-img w-100" alt="学术会议图片">
+                        <span class="conference-badge">即将召开</span>
+                    </div>
+                    <div class="conference-content">
+                        <h5 class="conference-name">世界公共卫生大会</h5>
+                        <p class="conference-date"><i class="bi bi-calendar"></i> 2025年10月15-18日</p>
+                        <p class="conference-desc">世界卫生组织主办的全球公共卫生领域最高级别会议，汇聚全球公共卫生专家，共同探讨全球公共卫生挑战与对策。</p>
+                        <div class="conference-meta">
+                            <span class="conference-location"><i class="bi bi-geo-alt"></i> 瑞士日内瓦</span>
+                            <span class="conference-status">报名中</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="conference-card" onclick="showConferenceDetails('国际流行病学学会年会')">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/seed/conference2/400/180.jpg" class="conference-img w-100" alt="学术会议图片">
+                        <span class="conference-badge">即将召开</span>
+                    </div>
+                    <div class="conference-content">
+                        <h5 class="conference-name">国际流行病学学会年会</h5>
+                        <p class="conference-date"><i class="bi bi-calendar"></i> 2025年9月20-23日</p>
+                        <p class="conference-desc">国际流行病学学会主办的年度学术盛会，展示流行病学最新研究成果，促进全球流行病学学术交流。</p>
+                        <div class="conference-meta">
+                            <span class="conference-location"><i class="bi bi-geo-alt"></i> 美国波士顿</span>
+                            <span class="conference-status">报名中</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="conference-card" onclick="showConferenceDetails('全球健康促进大会')">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/seed/conference3/400/180.jpg" class="conference-img w-100" alt="学术会议图片">
+                        <span class="conference-badge" style="background-color: var(--secondary-color);">已结束</span>
+                    </div>
+                    <div class="conference-content">
+                        <h5 class="conference-name">全球健康促进大会</h5>
+                        <p class="conference-date"><i class="bi bi-calendar"></i> 2025年5月10-13日</p>
+                        <p class="conference-desc">由世界卫生组织和联合国开发计划署联合主办，聚焦全球健康促进策略和实践，分享健康促进成功经验。</p>
+                        <div class="conference-meta">
+                            <span class="conference-location"><i class="bi bi-geo-alt"></i> 泰国曼谷</span>
+                            <span class="conference-status">已结束</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 分页 -->
+        <nav aria-label="国际交流分页">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">上一页</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">下一页</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>公共卫生继续医学教育网是经国家卫生健康委员会批准成立的全国性公共卫生继续医学教育网络培训平台，致力于提升公共卫生人才队伍素质和能力。</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html">首页</a></li>
+                        <li class="mb-2"><a href="courses.html">课程中心</a></li>
+                        <li class="mb-2"><a href="learning.html">在线学习</a></li>
+                        <li class="mb-2"><a href="credits.html">学分管理</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>积分中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="points-mall.html">积分商城</a></li>
+                        <li class="mb-2"><a href="points.html">我的积分</a></li>
+                        <li class="mb-2"><a href="points-rules.html">积分规则</a></li>
+                        <li class="mb-2"><a href="points-recharge.html">积分充值</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="bi bi-geo-alt me-2"></i> 北京市海淀区公共卫生学院路100号</p>
+                    <p><i class="bi bi-telephone me-2"></i> 010-12345678</p>
+                    <p><i class="bi bi-envelope me-2"></i> contact@phe-cme.edu.cn</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="订阅我们的资讯">
+                            <button class="btn btn-primary" type="button">订阅</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center py-3">
+                <p class="mb-0">© 2025 公共卫生继续医学教育网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+
+            // 积分提示框显示/隐藏
+            const userPointsDisplay = document.getElementById('userPointsDisplay');
+            const pointsTooltip = document.getElementById('pointsTooltip');
+            const closePointsTooltip = document.getElementById('closePointsTooltip');
+
+            userPointsDisplay.addEventListener('click', function() {
+                pointsTooltip.classList.toggle('show');
+            });
+
+            closePointsTooltip.addEventListener('click', function() {
+                pointsTooltip.classList.remove('show');
+            });
+
+            // 点击页面其他地方关闭提示框
+            document.addEventListener('click', function(event) {
+                if (!userPointsDisplay.contains(event.target) && !pointsTooltip.contains(event.target)) {
+                    pointsTooltip.classList.remove('show');
+                }
+            });
+
+            // 国际交流筛选功能
+            function filterExchange(type) {
+                // 更新导航项状态
+                const navItems = document.querySelectorAll('.exchange-nav-item');
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.currentTarget.classList.add('active');
+                
+                // 这里可以添加实际的筛选逻辑
+                alert('正在筛选' + type + '类型的国际交流项目...');
+            }
+
+            // 显示项目详情
+            function showProjectDetails(projectName) {
+                alert('正在加载"' + projectName + '"项目详情...');
+            }
+
+            // 显示会议详情
+            function showConferenceDetails(conferenceName) {
+                alert('正在加载"' + conferenceName + '"会议详情...');
+            }
+
+            // 订阅表单提交
+            const subscribeBtn = document.querySelector('footer .input-group button');
+            subscribeBtn.addEventListener('click', function() {
+                const emailInput = document.querySelector('footer .input-group input');
+                if (emailInput.value) {
+                    alert('订阅成功！感谢您的关注。');
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

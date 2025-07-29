@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线学习平台 - 公共卫生继续医学教育网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --points-color: #ff6b35;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-text);
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+        
+        /* 用户积分显示 */
+        .user-points {
+            background-color: var(--points-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-points:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* 页面标题样式 */
+        .page-header {
+            background: linear-gradient(rgba(13, 110, 253, 0.8), rgba(13, 110, 253, 0.8)), url('https://picsum.photos/seed/learning/1200/300.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        
+        /* 学习平台导航标签 */
+        .learning-tabs {
+            margin-bottom: 30px;
+        }
+        
+        .learning-tabs .nav-link {
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+        
+        .learning-tabs .nav-link.active {
+            color: var(--primary-color);
+            background-color: transparent;
+            border-bottom: 3px solid var(--primary-color);
+            border-radius: 0;
+        }
+        
+        /* 学习进度卡片 */
+        .progress-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .progress-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar-container {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+        
+        /* 课程章节列表 */
+        .chapter-list {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            overflow: hidden;
+        }
+        
+        .chapter-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        
+        .chapter-item:hover {
+            background-color: var(--light-bg);
+        }
+        
+        .chapter-item:last-child {
+            border-bottom: none;
+        }
+        
+        .chapter-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .chapter-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        .chapter-status {
+            color: var(--success-color);
+        }
+        
+        /* 直播课程卡片 */
+        .live-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .live-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .live-img {
+            height: 180px;
+            object-fit: cover;
+            position: relative;
+        }
+        
+        .live-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .live-badge .bi {
+            margin-right: 5px;
+        }
+        
+        .live-time {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .live-content {
+            padding: 15px;
+        }
+        
+        .live-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .live-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        /* 虚拟仿真课程卡片 */
+        .simulation-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .simulation-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .simulation-img {
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .simulation-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--info-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .simulation-content {
+            padding: 15px;
+        }
+        
+        .simulation-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .simulation-desc {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .simulation-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        /* 案例分析卡片 */
+        .case-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .case-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .case-desc {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        
+        .case-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        /* 测试评估卡片 */
+        .test-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .test-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-right: 20px;
+        }
+        
+        .test-content {
+            flex-grow: 1;
+        }
+        
+        .test-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .test-info {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        
+        footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: white;
+        }
+        
+        /* 积分提示框 */
+        .points-tooltip {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 15px;
+            width: 250px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .points-tooltip.show {
+            display: block;
+        }
+        
+        .points-tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .points-tooltip-title {
+            font-weight: bold;
+            color: var(--points-color);
+        }
+        
+        .points-tooltip-close {
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+        
+        .points-tooltip-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .points-tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .points-tooltip-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-pulse-fill"></i> 公共卫生继续医学教育网
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">课程中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="learning.html">在线学习</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credits.html">学分管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="points-mall.html">积分商城</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">学术资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experts.html">专家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practice.html">实践基地</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="international.html">国际交流</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            个人中心
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人信息</a></li>
+                            <li><a class="dropdown-item" href="points.html">我的积分</a></li>
+                            <li><a class="dropdown-item" href="learning-record.html">学习记录</a></li>
+                            <li><a class="dropdown-item" href="certificates.html">证书管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <div class="position-relative">
+                            <span class="user-points" id="userPointsDisplay">
+                                <i class="bi bi-coin"></i> 1280积分
+                            </span>
+                            <div class="points-tooltip" id="pointsTooltip">
+                                <div class="points-tooltip-header">
+                                    <span class="points-tooltip-title">积分明细</span>
+                                    <span class="points-tooltip-close" id="closePointsTooltip"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>今日获得</span>
+                                    <span class="text-success">+50</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本周获得</span>
+                                    <span class="text-success">+200</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本月获得</span>
+                                    <span class="text-success">+450</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>年度赠送</span>
+                                    <span class="text-success">+900</span>
+                                </div>
+                                <a href="points.html" class="points-tooltip-link">查看全部积分记录</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">在线学习平台</h1>
+            <p class="lead">随时随地学习，提升专业能力</p>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 学习进度概览 -->
+        <div class="progress-card">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 class="progress-title">我的学习进度</h3>
+                    <div class="progress-info">
+                        <span>本月学习时长：24小时</span>
+                        <span>完成课程：5门</span>
+                    </div>
+                    <div class="progress-info">
+                        <span>获得学分：12.5分</span>
+                        <span>学习排名：前15%</span>
+                    </div>
+                    <div class="progress-bar-container mt-3">
+                        <div class="progress-bar-fill" style="width: 65%;"></div>
+                    </div>
+                    <div class="progress-info mt-1">
+                        <span>年度学分完成进度</span>
+                        <span>65%</span>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                    <div class="text-center">
+                        <div class="display-4 fw-bold text-primary">65%</div>
+                        <p>年度学分完成度</p>
+                        <a href="credits.html" class="btn btn-primary">查看学分详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学习平台导航标签 -->
+        <ul class="nav nav-tabs learning-tabs" id="learningTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="video-tab" data-bs-toggle="tab" data-bs-target="#video" type="button">视频课程</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="live-tab" data-bs-toggle="tab" data-bs-target="#live" type="button">直播课堂</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="simulation-tab" data-bs-toggle="tab" data-bs-target="#simulation" type="button">虚拟仿真</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="case-tab" data-bs-toggle="tab" data-bs-target="#case" type="button">案例分析</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="test-tab" data-bs-toggle="tab" data-bs-target="#test" type="button">测试评估</button>
+            </li>
+        </ul>
+
+        <!-- 标签内容 -->
+        <div class="tab-content" id="learningTabsContent">
+            <!-- 视频课程 -->
+            <div class="tab-pane fade show active" id="video" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="chapter-list">
+                            <div class="chapter-item" onclick="alert('正在加载第一章内容...')">
+                                <div class="chapter-title">第一章：新发传染病概述</div>
+                                <div class="chapter-meta">
+                                    <span><i class="bi bi-play-circle"></i> 45分钟</span>
+                                    <span class="chapter-status"><i class="bi bi-check-circle-fill"></i> 已完成</span>
+                                </div>
+                            </div>
+                            <div class="chapter-item" onclick="alert('正在加载第二章内容...')">
+                                <div class="chapter-title">第二章：新发传染病的流行特点</div>
+                                <div class="chapter-meta">
+                                    <span><i class="bi bi-play-circle"></i> 52分钟</span>
+                                    <span class="chapter-status"><i class="bi bi-check-circle-fill"></i> 已完成</span>
+                                </div>
+                            </div>
+                            <div class="chapter-item" onclick="alert('正在加载第三章内容...')">
+                                <div class="chapter-title">第三章：新发传染病的监测与预警</div>
+                                <div class="chapter-meta">
+                                    <span><i class="bi bi-play-circle"></i> 38分钟</span>
+                                    <span class="chapter-status"><i class="bi bi-play-circle-fill"></i> 学习中</span>
+                                </div>
+                            </div>
+                            <div class="chapter-item" onclick="alert('正在加载第四章内容...')">
+                                <div class="chapter-title">第四章：新发传染病的防控策略</div>
+                                <div class="chapter-meta">
+                                    <span><i class="bi bi-play-circle"></i> 42分钟</span>
+                                    <span>未开始</span>
+                                </div>
+                            </div>
+                            <div class="chapter-item" onclick="alert('正在加载第五章内容...')">
+                                <div class="chapter-title">第五章：新发传染病的应急处置</div>
+                                <div class="chapter-meta">
+                                    <span><i class="bi bi-play-circle"></i> 50分钟</span>
+                                    <span>未开始</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">课程信息</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5>新发传染病防控策略与技术</h5>
+                                <p class="text-muted">深入讲解新发传染病的流行特点、防控策略和最新技术应用</p>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>授课教师：</span>
+                                    <span>王教授</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>课程时长：</span>
+                                    <span>3小时45分钟</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>课程学分：</span>
+                                    <span>5学分</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>学习进度：</span>
+                                    <span>40%</span>
+                                </div>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <button class="btn btn-primary w-100">继续学习</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 直播课堂 -->
+            <div class="tab-pane fade" id="live" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="live-card" onclick="alert('正在进入直播课堂...')">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/live1/400/180.jpg" class="live-img w-100" alt="直播课程">
+                                <div class="live-badge">
+                                    <i class="bi bi-broadcast"></i> 直播中
+                                </div>
+                                <div class="live-time">14:00-16:00</div>
+                            </div>
+                            <div class="live-content">
+                                <h5 class="live-title">突发公共卫生事件应急处置案例分析</h5>
+                                <div class="live-info">
+                                    <span><i class="bi bi-person"></i> 李教授</span>
+                                    <span><i class="bi bi-people"></i> 1256人观看</span>
+                                </div>
+                                <button class="btn btn-primary w-100 mt-3">立即观看</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="live-card" onclick="alert('预约成功！直播开始前将收到提醒。')">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/live2/400/180.jpg" class="live-img w-100" alt="直播课程">
+                                <div class="live-badge" style="background-color: var(--success-color);">
+                                    <i class="bi bi-calendar-event"></i> 预告
+                                </div>
+                                <div class="live-time">7月30日 19:00-21:00</div>
+                            </div>
+                            <div class="live-content">
+                                <h5 class="live-title">健康传播技巧与实践</h5>
+                                <div class="live-info">
+                                    <span><i class="bi bi-person"></i> 张教授</span>
+                                    <span><i class="bi bi-people"></i> 856人预约</span>
+                                </div>
+                                <button class="btn btn-outline-primary w-100 mt-3">预约直播</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="live-card" onclick="alert('正在加载直播回放...')">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/live3/400/180.jpg" class="live-img w-100" alt="直播课程">
+                                <div class="live-badge" style="background-color: var(--secondary-color);">
+                                    <i class="bi bi-play-circle"></i> 回放
+                                </div>
+                                <div class="live-time">7月28日 14:00-16:00</div>
+                            </div>
+                            <div class="live-content">
+                                <h5 class="live-title">环境卫生风险评估与管理</h5>
+                                <div class="live-info">
+                                    <span><i class="bi bi-person"></i> 陈教授</span>
+                                    <span><i class="bi bi-eye"></i> 3256次观看</span>
+                                </div>
+                                <button class="btn btn-outline-primary w-100 mt-3">观看回放</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 虚拟仿真 -->
+            <div class="tab-pane fade" id="simulation" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="simulation-card" onclick="alert('正在启动虚拟仿真系统...')">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/sim1/400/180.jpg" class="simulation-img w-100" alt="虚拟仿真课程">
+                                <div class="simulation-badge">虚拟仿真</div>
+                            </div>
+                            <div class="simulation-content">
+                                <h5 class="simulation-title">传染病爆发应急处置演练</h5>
+                                <p class="simulation-desc">模拟传染病爆发场景，学习应急处置流程和措施</p>
+                                <div class="simulation-info">
+                                    <span><i class="bi bi-clock"></i> 60分钟</span>
+                                    <span><i class="bi bi-award"></i> 3学分</span>
+                                </div>
+                                <button class="btn btn-primary w-100 mt-3">开始演练</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="simulation-card" onclick="alert('正在启动虚拟仿真系统...')">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/sim2/400/180.jpg" class="simulation-img w-100" alt="虚拟仿真课程">
+                                <div class="simulation-badge">虚拟仿真</div>
+                            </div>
+                            <div class="simulation-content">
+                                <h5 class="simulation-title">食品安全事件调查与处置</h5>
+                                <p class="simulation-desc">模拟食品安全事件场景，学习调查方法和处置流程</p>
+                                <div class="simulation-info">
+                                    <span><i class="bi bi-clock"></i> 45分钟</span>
+                                    <span><i class="bi bi-award"></i> 2学分</span>
+                                </div>
+                                <button class="btn btn-primary w-100 mt-3">开始演练</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="simulation-card" onclick="alert('正在启动虚拟仿真系统...')">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/sim3/400/180.jpg" class="simulation-img w-100" alt="虚拟仿真课程">
+                                <div class="simulation-badge">虚拟仿真</div>
+                            </div>
+                            <div class="simulation-content">
+                                <h5 class="simulation-title">环境卫生突发事件应急响应</h5>
+                                <p class="simulation-desc">模拟环境污染事件场景，学习应急响应措施</p>
+                                <div class="simulation-info">
+                                    <span><i class="bi bi-clock"></i> 50分钟</span>
+                                    <span><i class="bi bi-award"></i> 2.5学分</span>
+                                </div>
+                                <button class="btn btn-primary w-100 mt-3">开始演练</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 案例分析 -->
+            <div class="tab-pane fade" id="case" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="case-card" onclick="alert('正在加载案例分析...')">
+                            <h5 class="case-title">COVID-19疫情防控案例分析</h5>
+                            <p class="case-desc">深入分析COVID-19疫情的流行特点、防控措施和经验教训，探讨未来疫情防控策略。</p>
+                            <div class="case-meta">
+                                <span><i class="bi bi-person"></i> 王教授</span>
+                                <span><i class="bi bi-calendar"></i> 2025-07-15</span>
+                            </div>
+                            <button class="btn btn-outline-primary mt-3">查看案例</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-card" onclick="alert('正在加载案例分析...')">
+                            <h5 class="case-title">某市饮用水污染事件调查与处置</h5>
+                            <p class="case-desc">详细分析某市饮用水污染事件的调查过程、处置措施和后续改进措施。</p>
+                            <div class="case-meta">
+                                <span><i class="bi bi-person"></i> 陈教授</span>
+                                <span><i class="bi bi-calendar"></i> 2025-07-10</span>
+                            </div>
+                            <button class="btn btn-outline-primary mt-3">查看案例</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-card" onclick="alert('正在加载案例分析...')">
+                            <h5 class="case-title">学校结核病聚集性疫情控制</h5>
+                            <p class="case-desc">分析某学校结核病聚集性疫情的发现、报告、调查和控制全过程。</p>
+                            <div class="case-meta">
+                                <span><i class="bi bi-person"></i> 李教授</span>
+                                <span><i class="bi bi-calendar"></i> 2025-07-05</span>
+                            </div>
+                            <button class="btn btn-outline-primary mt-3">查看案例</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="case-card" onclick="alert('正在加载案例分析...')">
+                            <h5 class="case-title">食品安全事件应急处置</h5>
+                            <p class="case-desc">分析某大型食品安全事件的应急处置过程、风险评估和沟通策略。</p>
+                            <div class="case-meta">
+                                <span><i class="bi bi-person"></i> 张教授</span>
+                                <span><i class="bi bi-calendar"></i> 2025-06-28</span>
+                            </div>
+                            <button class="btn btn-outline-primary mt-3">查看案例</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 测试评估 -->
+            <div class="tab-pane fade" id="test" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="test-card" onclick="alert('正在加载测试详情...')">
+                            <i class="bi bi-file-earmark-text test-icon"></i>
+                            <div class="test-content">
+                                <h5 class="test-title">新发传染病防控策略与技术 - 章节测验</h5>
+                                <p class="test-info">共20题，限时30分钟，满分100分</p>
+                                <p class="test-info">已通过，得分：85分</p>
+                                <button class="btn btn-outline-primary">查看详情</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="test-card" onclick="alert('正在开始测验...')">
+                            <i class="bi bi-file-earmark-text test-icon"></i>
+                            <div class="test-content">
+                                <h5 class="test-title">公共卫生应急管理体系建设 - 章节测验</h5>
+                                <p class="test-info">共15题，限时25分钟，满分100分</p>
+                                <p class="test-info">未完成</p>
+                                <button class="btn btn-primary">开始测验</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="test-card" onclick="alert('正在加载证书...')">
+                            <i class="bi bi-award test-icon"></i>
+                            <div class="test-content">
+                                <h5 class="test-title">健康传播与健康教育技巧 - 课程考试</h5>
+                                <p class="test-info">共50题，限时90分钟，满分100分</p>
+                                <p class="test-info">已通过，得分：92分</p>
+                                <button class="btn btn-outline-primary">查看证书</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="test-card" onclick="alert('正在开始评估...')">
+                            <i class="bi bi-clipboard-check test-icon"></i>
+                            <div class="test-content">
+                                <h5 class="test-title">环境卫生风险评估与管理 - 综合评估</h5>
+                                <p class="test-info">包含理论测试和实践操作，满分100分</p>
+                                <p class="test-info">未开始</p>
+                                <button class="btn btn-primary">开始评估</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>公共卫生继续医学教育网是经国家卫生健康委员会批准成立的全国性公共卫生继续医学教育网络培训平台，致力于提升公共卫生人才队伍素质和能力。</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html">首页</a></li>
+                        <li class="mb-2"><a href="courses.html">课程中心</a></li>
+                        <li class="mb-2"><a href="learning.html">在线学习</a></li>
+                        <li class="mb-2"><a href="credits.html">学分管理</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>积分中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="points-mall.html">积分商城</a></li>
+                        <li class="mb-2"><a href="points.html">我的积分</a></li>
+                        <li class="mb-2"><a href="points-rules.html">积分规则</a></li>
+                        <li class="mb-2"><a href="points-recharge.html">积分充值</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="bi bi-geo-alt me-2"></i> 北京市海淀区公共卫生学院路100号</p>
+                    <p><i class="bi bi-telephone me-2"></i> 010-12345678</p>
+                    <p><i class="bi bi-envelope me-2"></i> contact@phe-cme.edu.cn</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="订阅我们的资讯">
+                            <button class="btn btn-primary" type="button">订阅</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center py-3">
+                <p class="mb-0">© 2025 公共卫生继续医学教育网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+
+            // 积分提示框显示/隐藏
+            const userPointsDisplay = document.getElementById('userPointsDisplay');
+            const pointsTooltip = document.getElementById('pointsTooltip');
+            const closePointsTooltip = document.getElementById('closePointsTooltip');
+
+            userPointsDisplay.addEventListener('click', function() {
+                pointsTooltip.classList.toggle('show');
+            });
+
+            closePointsTooltip.addEventListener('click', function() {
+                pointsTooltip.classList.remove('show');
+            });
+
+            // 点击页面其他地方关闭提示框
+            document.addEventListener('click', function(event) {
+                if (!userPointsDisplay.contains(event.target) && !pointsTooltip.contains(event.target)) {
+                    pointsTooltip.classList.remove('show');
+                }
+            });
+
+            // 订阅表单提交
+            const subscribeBtn = document.querySelector('footer .input-group button');
+            subscribeBtn.addEventListener('click', function() {
+                const emailInput = document.querySelector('footer .input-group input');
+                if (emailInput.value) {
+                    alert('订阅成功！感谢您的关注。');
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
