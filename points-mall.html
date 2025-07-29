@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分商城 - 公共卫生继续医学教育网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --points-color: #ff6b35;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-text);
+        }
+        /* 导航栏样式 */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        /* 用户积分显示 */
+        .user-points {
+            background-color: var(--points-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .user-points:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        /* 页面标题样式 */
+        .page-header {
+            background: linear-gradient(rgba(255, 107, 53, 0.8), rgba(255, 107, 53, 0.8)), url('https://picsum.photos/seed/points-mall/1200/300.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        /* 积分商城导航标签 */
+        .mall-tabs {
+            margin-bottom: 30px;
+        }
+        .mall-tabs .nav-link {
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+        .mall-tabs .nav-link.active {
+            color: var(--points-color);
+            background-color: transparent;
+            border-bottom: 3px solid var(--points-color);
+            border-radius: 0;
+        }
+        /* 商品卡片样式 */
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+            height: 100%;
+            margin-bottom: 30px;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-img {
+            height: 180px;
+            object-fit: cover;
+        }
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--points-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .product-content {
+            padding: 15px;
+        }
+        .product-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .product-desc {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .product-points {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .product-points-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--points-color);
+        }
+        .product-points-value i {
+            margin-right: 5px;
+        }
+        .product-stock {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        /* 积分充值卡片 */
+        .recharge-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+        }
+        .recharge-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        .recharge-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .recharge-option {
+            flex: 1;
+            min-width: 100px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .recharge-option:hover {
+            border-color: var(--primary-color);
+        }
+        .recharge-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+        .recharge-option-amount {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .recharge-option-points {
+            color: var(--points-color);
+            font-size: 0.9rem;
+        }
+        .recharge-payment {
+            margin-top: 20px;
+        }
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .payment-method {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .payment-method:hover {
+            border-color: var(--primary-color);
+        }
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        /* 积分规则卡片 */
+        .rules-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+        }
+        .rules-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        .rules-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .rules-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .rules-list li:last-child {
+            border-bottom: none;
+        }
+        .rules-list li i {
+            color: var(--points-color);
+            margin-right: 10px;
+        }
+        /* 页脚样式 */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-pulse-fill"></i> 公共卫生继续医学教育网
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">课程中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learning.html">在线学习</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credits.html">学分管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="points-mall.html">积分商城</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">学术资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experts.html">专家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practice.html">实践基地</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            个人中心
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人信息</a></li>
+                            <li><a class="dropdown-item" href="points.html">我的积分</a></li>
+                            <li><a class="dropdown-item" href="learning-record.html">学习记录</a></li>
+                            <li><a class="dropdown-item" href="certificates.html">证书管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <span class="user-points">
+                            <i class="bi bi-coin"></i> 1280积分
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">积分商城</h1>
+            <p class="lead">使用积分兑换课程、证书、资源等多种权益</p>
+        </div>
+    </div>
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 积分商城导航标签 -->
+        <ul class="nav nav-tabs mall-tabs" id="mallTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="courses-tab" data-bs-toggle="tab" data-bs-target="#courses" type="button">课程兑换</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button">资源兑换</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="certificates-tab" data-bs-toggle="tab" data-bs-target="#certificates" type="button">证书兑换</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="recharge-tab" data-bs-toggle="tab" data-bs-target="#recharge" type="button">积分充值</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rules-tab" data-bs-toggle="tab" data-bs-target="#rules" type="button">积分规则</button>
+            </li>
+        </ul>
+        <!-- 标签内容 -->
+        <div class="tab-content" id="mallTabsContent">
+            <!-- 课程兑换 -->
+            <div class="tab-pane fade show active" id="courses" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/product1/400/180.jpg" class="product-img w-100" alt="课程图片">
+                                <div class="product-badge">热门</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">新发传染病防控策略与技术</h5>
+                                <p class="product-desc">深入讲解新发传染病的流行特点、防控策略和最新技术应用</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 200积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/product2/400/180.jpg" class="product-img w-100" alt="课程图片">
+                                <div class="product-badge">推荐</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">公共卫生应急管理体系建设</h5>
+                                <p class="product-desc">系统介绍公共卫生应急管理体系的构建与运行机制</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 160积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/product3/400/180.jpg" class="product-img w-100" alt="课程图片">
+                                <div class="product-badge">新品</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">健康传播与健康教育技巧</h5>
+                                <p class="product-desc">掌握健康传播理论和方法，提升健康教育实践能力</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 120积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/product4/400/180.jpg" class="product-img w-100" alt="课程图片">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">流行病学调查方法与应用</h5>
+                                <p class="product-desc">系统学习流行病学调查设计、实施和数据分析方法</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 240积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/product5/400/180.jpg" class="product-img w-100" alt="课程图片">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">环境健康风险评估与管理</h5>
+                                <p class="product-desc">学习环境健康风险识别、评估和管理的理论与方法</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 180积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/product6/400/180.jpg" class="product-img w-100" alt="课程图片">
+                                <div class="product-badge">限时</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">食品安全风险监测与评估</h5>
+                                <p class="product-desc">掌握食品安全风险监测、评估和预警的技术方法</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 150积分</span>
+                                    <span class="product-stock">库存: 有限</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 资源兑换 -->
+            <div class="tab-pane fade" id="resources" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/resource1/400/180.jpg" class="product-img w-100" alt="资源图片">
+                                <div class="product-badge">独家</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">公共卫生案例集（2025版）</h5>
+                                <p class="product-desc">收录最新公共卫生典型案例，包含详细分析和解决方案</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 300积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/resource2/400/180.jpg" class="product-img w-100" alt="资源图片">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">公共卫生数据分析工具包</h5>
+                                <p class="product-desc">包含流行病学统计分析、数据可视化等多种实用工具</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 350积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/resource3/400/180.jpg" class="product-img w-100" alt="资源图片">
+                                <div class="product-badge">热门</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">专家讲座视频合集</h5>
+                                <p class="product-desc">收录国内外知名专家的精彩讲座视频，涵盖公共卫生各领域</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 400积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/resource4/400/180.jpg" class="product-img w-100" alt="资源图片">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">公共卫生政策法规汇编</h5>
+                                <p class="product-desc">最新公共卫生相关政策法规全文及解读，便于查阅</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 200积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/resource5/400/180.jpg" class="product-img w-100" alt="资源图片">
+                                <div class="product-badge">新品</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">健康教育材料设计模板</h5>
+                                <p class="product-desc">多种健康教育宣传材料设计模板，可直接编辑使用</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 150积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/resource6/400/180.jpg" class="product-img w-100" alt="资源图片">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">公共卫生应急预案模板</h5>
+                                <p class="product-desc">各类突发公共卫生事件应急预案模板，可直接修改使用</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 180积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 证书兑换 -->
+            <div class="tab-pane fade" id="certificates" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/cert1/400/180.jpg" class="product-img w-100" alt="证书图片">
+                                <div class="product-badge">热门</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">新发传染病防控培训证书</h5>
+                                <p class="product-desc">完成相关课程学习并通过考核后，可获得官方认证的培训证书</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 100积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/cert2/400/180.jpg" class="product-img w-100" alt="证书图片">
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">公共卫生应急管理证书</h5>
+                                <p class="product-desc">完成应急管理相关课程学习并通过考核后，可获得专业证书</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 120积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/seed/cert3/400/180.jpg" class="product-img w-100" alt="证书图片">
+                                <div class="product-badge">推荐</div>
+                            </div>
+                            <div class="product-content">
+                                <h5 class="product-title">健康教育师能力证书</h5>
+                                <p class="product-desc">完成健康教育相关课程并通过考核后，可获得专业能力证书</p>
+                                <div class="product-points">
+                                    <span class="product-points-value"><i class="bi bi-coin"></i> 150积分</span>
+                                    <span class="product-stock">库存: 充足</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即兑换</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 积分充值 -->
+            <div class="tab-pane fade" id="recharge" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="recharge-card">
+                            <h4 class="recharge-title">选择充值金额</h4>
+                            <div class="recharge-options">
+                                <div class="recharge-option">
+                                    <div class="recharge-option-amount">¥10</div>
+                                    <div class="recharge-option-points">100积分</div>
+                                </div>
+                                <div class="recharge-option">
+                                    <div class="recharge-option-amount">¥30</div>
+                                    <div class="recharge-option-points">300积分</div>
+                                </div>
+                                <div class="recharge-option selected">
+                                    <div class="recharge-option-amount">¥50</div>
+                                    <div class="recharge-option-points">500积分</div>
+                                </div>
+                                <div class="recharge-option">
+                                    <div class="recharge-option-amount">¥100</div>
+                                    <div class="recharge-option-points">1000积分</div>
+                                </div>
+                                <div class="recharge-option">
+                                    <div class="recharge-option-amount">¥200</div>
+                                    <div class="recharge-option-points">2000积分</div>
+                                </div>
+                                <div class="recharge-option">
+                                    <div class="recharge-option-amount">¥500</div>
+                                    <div class="recharge-option-points">5000积分</div>
+                                </div>
+                            </div>
+                            <h4 class="recharge-title">选择支付方式</h4>
+                            <div class="payment-methods">
+                                <div class="payment-method selected">
+                                    <i class="bi bi-wechat" style="color: #07C160;"></i>
+                                    <div>微信支付</div>
+                                </div>
+                                <div class="payment-method">
+                                    <i class="bi bi-alipay" style="color: #1677FF;"></i>
+                                    <div>支付宝</div>
+                                </div>
+                                <div class="payment-method">
+                                    <i class="bi bi-credit-card" style="color: #E60012;"></i>
+                                    <div>银联支付</div>
+                                </div>
+                            </div>
+                            <div class="recharge-payment">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>充值金额：</span>
+                                    <span class="fw-bold">¥50</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>获得积分：</span>
+                                    <span class="fw-bold text-success">500积分</span>
+                                </div>
+                                <button class="btn btn-primary w-100">立即充值</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">充值说明</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 充值积分即时到账</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 支持微信、支付宝、银联支付</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 充值积分无有效期限制</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 充值成功后可开具发票</li>
+                                </ul>
+                                <hr>
+                                <p class="text-muted">如有疑问，请联系客服：</p>
+                                <p><i class="bi bi-telephone me-2"></i> 400-123-4567</p>
+                                <p><i class="bi bi-envelope me-2"></i> service@phe-cme.edu.cn</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 积分规则 -->
+            <div class="tab-pane fade" id="rules" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="rules-card">
+                            <h4 class="rules-title">积分获取规则</h4>
+                            <ul class="rules-list">
+                                <li><i class="bi bi-check-circle"></i> <strong>完成课程学习：</strong>完成课程学习并通过考核，根据课程难度和时长获得相应积分，一般每学时课程可获得10积分。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>参与讨论互动：</strong>在课程讨论区、论坛等平台进行提问、回答、分享经验等互动行为，根据内容质量和互动频率获得5-20积分。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>每日签到：</strong>每日登录平台并签到，可获得5积分，连续签到7天额外奖励20积分。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>完成任务：</strong>完成平台发布的日常任务或成就任务，如完善个人信息、首次分享课程、邀请好友注册等，可获得10-50积分。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>内容贡献：</strong>上传优质学习资源，如学习笔记、病例分析、研究心得等，经审核通过后，根据资源质量和价值获得20-100积分。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>参与活动：</strong>参与平台组织的线上或线下活动，如知识竞赛、征文活动、调研问卷等，可获得20-200积分。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>年度赠送：</strong>通过标准审核入会的用户，每年可获得900积分（足够支持90小时学习）。</li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <h4 class="rules-title">积分使用规则</h4>
+                            <ul class="rules-list">
+                                <li><i class="bi bi-check-circle"></i> <strong>兑换课程：</strong>使用积分兑换平台上的付费课程，每门课程所需积分在课程页面明确标注。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>获取证书：</strong>完成特定课程或达到一定学习要求后，可使用积分获取相应的学习证书或学分证明。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>兑换资源：</strong>使用积分兑换平台提供的独家或高价值的线上资源，如专家讲座视频、专业研究报告、电子书籍等。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>参与活动：</strong>使用积分参与平台组织的抽奖或竞拍活动，有机会获得更丰厚的奖品或稀缺资源。</li>
+                                <li><i class="bi bi-check-circle"></i> <strong>提升会员等级：</strong>使用积分提升会员等级，享受更多专属权益，如免费学习更多课程、优先参与活动等。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">积分说明</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>积分是平台内部的虚拟价值衡量和激励工具，独立于国家或地方卫生行政部门规定的继续医学教育学分体系。</p>
+                                <hr>
+                                <p><strong>积分有效期：</strong></p>
+                                <p>通过充值获得的积分无有效期限制；通过活动、任务等获得的积分有效期为1年；年度赠送积分有效期为当年。</p>
+                                <hr>
+                                <p><strong>积分查询：</strong></p>
+                                <p>用户可在"我的积分"页面查看积分余额、积分获取记录和消费记录。</p>
+                                <hr>
+                                <p><strong>积分转让：</strong></p>
+                                <p>积分不支持转让或赠与他人，仅限本人使用。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>公共卫生继续医学教育网是经国家卫生健康委员会批准成立的全国性公共卫生继续医学教育网络培训平台，致力于提升公共卫生人才队伍素质和能力。</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html">首页</a></li>
+                        <li class="mb-2"><a href="courses.html">课程中心</a></li>
+                        <li class="mb-2"><a href="learning.html">在线学习</a></li>
+                        <li class="mb-2"><a href="credits.html">学分管理</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>积分中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="points-mall.html">积分商城</a></li>
+                        <li class="mb-2"><a href="points.html">我的积分</a></li>
+                        <li class="mb-2"><a href="points-rules.html">积分规则</a></li>
+                        <li class="mb-2"><a href="points-recharge.html">积分充值</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="bi bi-geo-alt me-2"></i> 北京市海淀区公共卫生学院路100号</p>
+                    <p><i class="bi bi-telephone me-2"></i> 010-12345678</p>
+                    <p><i class="bi bi-envelope me-2"></i> contact@phe-cme.edu.cn</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="订阅我们的资讯">
+                            <button class="btn btn-primary" type="button">订阅</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center py-3">
+                <p class="mb-0">© 2025 公共卫生继续医学教育网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+            // 充值选项选择
+            const rechargeOptions = document.querySelectorAll('.recharge-option');
+            rechargeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    rechargeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    // 更新充值金额显示
+                    const amount = this.querySelector('.recharge-option-amount').textContent;
+                    const points = this.querySelector('.recharge-option-points').textContent;
+                    document.querySelector('.recharge-payment .fw-bold').textContent = amount;
+                    document.querySelector('.recharge-payment .text-success').textContent = points;
+                });
+            });
+            // 支付方式选择
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            // 商品兑换按钮点击效果
+            const exchangeButtons = document.querySelectorAll('.product-card .btn-primary');
+            exchangeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productName = this.closest('.product-card').querySelector('.product-title').textContent;
+                    const pointsNeeded = this.closest('.product-card').querySelector('.product-points-value').textContent;
+                    if (confirm(`确定要使用${pointsNeeded}兑换"${productName}"吗？`)) {
+                        alert('兑换成功！请在"我的积分"中查看积分变动记录。');
+                    }
+                });
+            });
+            // 充值按钮点击效果
+            const rechargeButton = document.querySelector('.recharge-payment .btn-primary');
+            rechargeButton.addEventListener('click', function() {
+                const amount = document.querySelector('.recharge-payment .fw-bold').textContent;
+                const paymentMethod = document.querySelector('.payment-method.selected div:last-child').textContent;
+                if (confirm(`确定要充值${amount}，使用${paymentMethod}支付吗？`)) {
+                    alert('充值成功！积分已到账，请在"我的积分"中查看。');
+                }
+            });
+            // 订阅表单提交
+            const subscribeBtn = document.querySelector('footer .input-group button');
+            subscribeBtn.addEventListener('click', function() {
+                const emailInput = document.querySelector('footer .input-group input');
+                if (emailInput.value) {
+                    alert('订阅成功！感谢您的关注。');
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

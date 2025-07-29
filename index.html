@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公共卫生继续医学教育网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --points-color: #ff6b35;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-text);
+        }
+        /* 导航栏样式 */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        /* 用户积分显示 */
+        .user-points {
+            background-color: var(--points-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .user-points:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        /* 轮播图样式 */
+        .carousel-item {
+            height: 450px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://picsum.photos/seed/publichealth/1200/450.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .carousel-caption {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 700px;
+        }
+        /* 功能区块样式 */
+        .feature-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,.15);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        /* 课程卡片样式 */
+        .course-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .course-img {
+            height: 180px;
+            object-fit: cover;
+        }
+        .course-category {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .course-points {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--points-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        .course-points i {
+            margin-right: 5px;
+        }
+        /* 积分获取方式卡片 */
+        .points-ways {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .points-ways:hover {
+            transform: translateY(-5px);
+        }
+        .points-ways-icon {
+            font-size: 2.5rem;
+            color: var(--points-color);
+            margin-bottom: 15px;
+        }
+        /* 新闻动态样式 */
+        .news-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            transition: all 0.3s;
+        }
+        .news-item:hover {
+            background-color: var(--light-bg);
+        }
+        .news-date {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        /* 统计数据样式 */
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 20px;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        /* 页脚样式 */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: white;
+        }
+        /* 积分提示框 */
+        .points-tooltip {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 15px;
+            width: 250px;
+            z-index: 1000;
+            display: none;
+        }
+        .points-tooltip.show {
+            display: block;
+        }
+        .points-tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .points-tooltip-title {
+            font-weight: bold;
+            color: var(--points-color);
+        }
+        .points-tooltip-close {
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+        .points-tooltip-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        .points-tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+        .points-tooltip-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .carousel-item {
+                height: 300px;
+            }
+            .user-points {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-pulse-fill"></i> 公共卫生继续医学教育网
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">课程中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learning.html">在线学习</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credits.html">学分管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="points-mall.html">积分商城</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">学术资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experts.html">专家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practice.html">实践基地</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            个人中心
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人信息</a></li>
+                            <li><a class="dropdown-item" href="points.html">我的积分</a></li>
+                            <li><a class="dropdown-item" href="learning-record.html">学习记录</a></li>
+                            <li><a class="dropdown-item" href="certificates.html">证书管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <div class="position-relative">
+                            <span class="user-points" id="userPointsDisplay">
+                                <i class="bi bi-coin"></i> 1280积分
+                            </span>
+                            <div class="points-tooltip" id="pointsTooltip">
+                                <div class="points-tooltip-header">
+                                    <span class="points-tooltip-title">积分明细</span>
+                                    <span class="points-tooltip-close" id="closePointsTooltip"><i class="bi bi-x"></i></span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>今日获得</span>
+                                    <span class="text-success">+50</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本周获得</span>
+                                    <span class="text-success">+200</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>本月获得</span>
+                                    <span class="text-success">+450</span>
+                                </div>
+                                <div class="points-tooltip-item">
+                                    <span>年度赠送</span>
+                                    <span class="text-success">+900</span>
+                                </div>
+                                <a href="points.html" class="points-tooltip-link">查看全部积分记录</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- 轮播图 -->
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="carousel-caption">
+                    <h2>提升公共卫生专业能力，守护全民健康</h2>
+                    <p>提供全面、专业、便捷的继续医学教育服务</p>
+                    <a href="courses.html" class="btn btn-primary btn-lg">探索课程</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://picsum.photos/seed/epidemic/1200/450.jpg'); background-size: cover; background-position: center;">
+                <div class="carousel-caption">
+                    <h2>新用户注册即送900积分</h2>
+                    <p>足以支持90小时学习，年度会员更有专属积分赠送</p>
+                    <a href="register.html" class="btn btn-primary btn-lg">立即注册</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://picsum.photos/seed/points/1200/450.jpg'); background-size: cover; background-position: center;">
+                <div class="carousel-caption">
+                    <h2>积分商城全新上线</h2>
+                    <p>兑换课程、获取证书、下载资源，多种积分兑换方式</p>
+                    <a href="points-mall.html" class="btn btn-primary btn-lg">前往兑换</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+    <!-- 快速导航 -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">快速导航</h2>
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <a href="courses.html" class="text-decoration-none">
+                        <div class="feature-box">
+                            <i class="bi bi-book feature-icon"></i>
+                            <h4>课程中心</h4>
+                            <p>6000+专业课程，涵盖公共卫生各领域</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <a href="learning.html" class="text-decoration-none">
+                        <div class="feature-box">
+                            <i class="bi bi-laptop feature-icon"></i>
+                            <h4>在线学习</h4>
+                            <p>随时随地学习，支持PC和移动端</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <a href="points-mall.html" class="text-decoration-none">
+                        <div class="feature-box">
+                            <i class="bi bi-shop feature-icon" style="color: var(--points-color);"></i>
+                            <h4>积分商城</h4>
+                            <p>兑换课程、证书、资源等多种权益</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <a href="practice.html" class="text-decoration-none">
+                        <div class="feature-box">
+                            <i class="bi bi-building feature-icon"></i>
+                            <h4>实践基地</h4>
+                            <p>真实场景实践，提升专业能力</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 积分获取方式 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">积分获取方式</h2>
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="points-ways">
+                        <div class="text-center">
+                            <i class="bi bi-book-half points-ways-icon"></i>
+                            <h5>完成课程学习</h5>
+                            <p class="text-muted">完成课程学习并通过考核，获得相应积分奖励</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="points-ways">
+                        <div class="text-center">
+                            <i class="bi bi-chat-dots points-ways-icon"></i>
+                            <h5>参与讨论互动</h5>
+                            <p class="text-muted">在讨论区提问、回答、分享经验，获得积分奖励</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="points-ways">
+                        <div class="text-center">
+                            <i class="bi bi-calendar-check points-ways-icon"></i>
+                            <h5>每日签到任务</h5>
+                            <p class="text-muted">每日登录签到，完成日常任务，获得积分奖励</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="points-ways">
+                        <div class="text-center">
+                            <i class="bi bi-file-earmark-plus points-ways-icon"></i>
+                            <h5>内容贡献</h5>
+                            <p class="text-muted">上传优质学习资源，经审核通过获得积分奖励</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="points-ways">
+                        <div class="text-center">
+                            <i class="bi bi-credit-card points-ways-icon"></i>
+                            <h5>积分充值</h5>
+                            <p class="text-muted">通过支付购买积分，快速获取所需积分</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="points-ways">
+                        <div class="text-center">
+                            <i class="bi bi-gift points-ways-icon"></i>
+                            <h5>年度赠送</h5>
+                            <p class="text-muted">通过标准审核入会，每年赠送90小时学习积分</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 统计数据 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-number">6000+</div>
+                        <p>专业课程</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-number">50万+</div>
+                        <p>注册学员</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-number">300+</div>
+                        <p>合作机构</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-number">20年+</div>
+                        <p>教育经验</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 热门课程推荐 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>热门课程推荐</h2>
+                <a href="courses.html" class="btn btn-outline-primary">查看全部</a>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="course-card">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/seed/course1/400/180.jpg" class="course-img w-100" alt="课程图片">
+                            <span class="course-category">疾病防控</span>
+                            <span class="course-points"><i class="bi bi-coin"></i> 200积分</span>
+                        </div>
+                        <div class="p-3">
+                            <h5>新发传染病防控策略与技术</h5>
+                            <p class="text-muted">深入讲解新发传染病的流行特点、防控策略和最新技术应用</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-clock"></i> 20学时</span>
+                                <span><i class="bi bi-award"></i> 5学分</span>
+                            </div>
+                            <div class="mt-3">
+                                <a href="course-detail.html" class="btn btn-primary w-100">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="course-card">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/seed/course2/400/180.jpg" class="course-img w-100" alt="课程图片">
+                            <span class="course-category">卫生管理</span>
+                            <span class="course-points"><i class="bi bi-coin"></i> 160积分</span>
+                        </div>
+                        <div class="p-3">
+                            <h5>公共卫生应急管理体系建设</h5>
+                            <p class="text-muted">系统介绍公共卫生应急管理体系的构建与运行机制</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-clock"></i> 16学时</span>
+                                <span><i class="bi bi-award"></i> 4学分</span>
+                            </div>
+                            <div class="mt-3">
+                                <a href="course-detail.html" class="btn btn-primary w-100">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="course-card">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/seed/course3/400/180.jpg" class="course-img w-100" alt="课程图片">
+                            <span class="course-category">健康教育</span>
+                            <span class="course-points"><i class="bi bi-coin"></i> 120积分</span>
+                        </div>
+                        <div class="p-3">
+                            <h5>健康传播与健康教育技巧</h5>
+                            <p class="text-muted">掌握健康传播理论和方法，提升健康教育实践能力</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-clock"></i> 12学时</span>
+                                <span><i class="bi bi-award"></i> 3学分</span>
+                            </div>
+                            <div class="mt-3">
+                                <a href="course-detail.html" class="btn btn-primary w-100">查看详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 最新动态 -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>最新动态</h2>
+                <a href="news.html" class="btn btn-outline-primary">查看更多</a>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="news-item">
+                        <div class="d-flex">
+                            <div class="news-date me-3">
+                                <div class="fw-bold">29</div>
+                                <div>2025-07</div>
+                            </div>
+                            <div>
+                                <h5>关于举办2025年全国公共卫生继续教育高峰论坛的通知</h5>
+                                <p>为促进公共卫生继续教育发展，提升公共卫生人才队伍素质，定于2025年9月15-17日在北京举办2025年全国公共卫生继续教育高峰论坛，参会可获得200积分奖励...</p>
+                                <a href="news-detail.html" class="btn btn-sm btn-outline-primary">阅读更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="d-flex">
+                            <div class="news-date me-3">
+                                <div class="fw-bold">25</div>
+                                <div>2025-07</div>
+                            </div>
+                            <div>
+                                <h5>新课程上线：《突发公共卫生事件应急处置虚拟仿真演练》</h5>
+                                <p>本课程采用虚拟仿真技术，模拟各类突发公共卫生事件场景，帮助学员掌握应急处置流程和技能，完成课程可获得150积分...</p>
+                                <a href="news-detail.html" class="btn btn-sm btn-outline-primary">阅读更多</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="d-flex">
+                            <div class="news-date me-3">
+                                <div class="fw-bold">20</div>
+                                <div>2025-07</div>
+                            </div>
+                            <div>
+                                <h5>关于开展2025年下半年国家级继续医学教育项目申报工作的通知</h5>
+                                <p>根据国家卫生健康委员会有关文件精神，现开始组织2025年下半年国家级继续医学教育项目申报工作，申报成功可获得项目积分奖励...</p>
+                                <a href="news-detail.html" class="btn btn-sm btn-outline-primary">阅读更多</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">重要通知</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none">2025年度继续医学教育学分申报指南</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none">关于系统升级维护的通知</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none">公共卫生执业医师资格考试报名通知</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="#" class="text-decoration-none">2025年度优秀学员评选活动启动</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 名师讲堂 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>名师讲堂</h2>
+                <a href="experts.html" class="btn btn-outline-primary">查看全部</a>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="card text-center">
+                        <img src="https://picsum.photos/seed/expert1/200/200.jpg" class="card-img-top rounded-circle mx-auto mt-3" alt="专家头像" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">王教授</h5>
+                            <p class="card-text text-muted">流行病学专家</p>
+                            <p class="card-text">国家疾控中心首席专家，从事流行病学研究30余年</p>
+                            <a href="expert-detail.html" class="btn btn-sm btn-primary">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card text-center">
+                        <img src="https://picsum.photos/seed/expert2/200/200.jpg" class="card-img-top rounded-circle mx-auto mt-3" alt="专家头像" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">李教授</h5>
+                            <p class="card-text text-muted">卫生管理专家</p>
+                            <p class="card-text">公共卫生管理学院院长，卫生政策研究领域权威</p>
+                            <a href="expert-detail.html" class="btn btn-sm btn-primary">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card text-center">
+                        <img src="https://picsum.photos/seed/expert3/200/200.jpg" class="card-img-top rounded-circle mx-auto mt-3" alt="专家头像" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">张教授</h5>
+                            <p class="card-text text-muted">健康教育专家</p>
+                            <p class="card-text">健康教育研究所所长，健康传播理论与实践专家</p>
+                            <a href="expert-detail.html" class="btn btn-sm btn-primary">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card text-center">
+                        <img src="https://picsum.photos/seed/expert4/200/200.jpg" class="card-img-top rounded-circle mx-auto mt-3" alt="专家头像" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">陈教授</h5>
+                            <p class="card-text text-muted">环境卫生专家</p>
+                            <p class="card-text">环境健康研究所首席科学家，环境与健康研究领域领军人物</p>
+                            <a href="expert-detail.html" class="btn btn-sm btn-primary">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>公共卫生继续医学教育网是经国家卫生健康委员会批准成立的全国性公共卫生继续医学教育网络培训平台，致力于提升公共卫生人才队伍素质和能力。</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html">首页</a></li>
+                        <li class="mb-2"><a href="courses.html">课程中心</a></li>
+                        <li class="mb-2"><a href="learning.html">在线学习</a></li>
+                        <li class="mb-2"><a href="credits.html">学分管理</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>积分中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="points-mall.html">积分商城</a></li>
+                        <li class="mb-2"><a href="points.html">我的积分</a></li>
+                        <li class="mb-2"><a href="points-rules.html">积分规则</a></li>
+                        <li class="mb-2"><a href="points-recharge.html">积分充值</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="bi bi-geo-alt me-2"></i> 北京市海淀区公共卫生学院路100号</p>
+                    <p><i class="bi bi-telephone me-2"></i> 010-12345678</p>
+                    <p><i class="bi bi-envelope me-2"></i> contact@phe-cme.edu.cn</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="订阅我们的资讯">
+                            <button class="btn btn-primary" type="button">订阅</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center py-3">
+                <p class="mb-0">© 2025 公共卫生继续医学教育网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+            // 积分提示框显示/隐藏
+            const userPointsDisplay = document.getElementById('userPointsDisplay');
+            const pointsTooltip = document.getElementById('pointsTooltip');
+            const closePointsTooltip = document.getElementById('closePointsTooltip');
+            userPointsDisplay.addEventListener('click', function() {
+                pointsTooltip.classList.toggle('show');
+            });
+            closePointsTooltip.addEventListener('click', function() {
+                pointsTooltip.classList.remove('show');
+            });
+            // 点击页面其他地方关闭提示框
+            document.addEventListener('click', function(event) {
+                if (!userPointsDisplay.contains(event.target) && !pointsTooltip.contains(event.target)) {
+                    pointsTooltip.classList.remove('show');
+                }
+            });
+            // 课程卡片点击效果
+            const courseCards = document.querySelectorAll('.course-card');
+            courseCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    window.location.href = 'course-detail.html';
+                });
+            });
+            // 新闻项点击效果
+            const newsItems = document.querySelectorAll('.news-item');
+            newsItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    window.location.href = 'news-detail.html';
+                });
+            });
+            // 订阅表单提交
+            const subscribeBtn = document.querySelector('footer .input-group button');
+            subscribeBtn.addEventListener('click', function() {
+                const emailInput = document.querySelector('footer .input-group input');
+                if (emailInput.value) {
+                    alert('订阅成功！感谢您的关注。');
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的积分 - 公共卫生继续医学教育网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --points-color: #ff6b35;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-text);
+        }
+        /* 导航栏样式 */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        /* 用户积分显示 */
+        .user-points {
+            background-color: var(--points-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .user-points:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        /* 页面标题样式 */
+        .page-header {
+            background: linear-gradient(rgba(255, 107, 53, 0.8), rgba(255, 107, 53, 0.8)), url('https://picsum.photos/seed/my-points/1200/300.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        /* 积分概览卡片 */
+        .points-overview {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        .points-balance {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .points-balance-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--points-color);
+        }
+        .points-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .points-stat {
+            text-align: center;
+        }
+        .points-stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .points-stat-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        .points-stat-number.positive {
+            color: var(--success-color);
+        }
+        .points-stat-number.negative {
+            color: #dc3545;
+        }
+        /* 积分记录导航标签 */
+        .points-tabs {
+            margin-bottom: 30px;
+        }
+        .points-tabs .nav-link {
+            color: var(--dark-text);
+            font-weight: 500;
+        }
+        .points-tabs .nav-link.active {
+            color: var(--points-color);
+            background-color: transparent;
+            border-bottom: 3px solid var(--points-color);
+            border-radius: 0;
+        }
+        /* 积分记录表格 */
+        .points-table {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+        }
+        .points-table th {
+            background-color: var(--light-bg);
+            font-weight: 500;
+        }
+        .points-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .points-type.income {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: var(--success-color);
+        }
+        .points-type.expense {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        .points-amount {
+            font-weight: 500;
+        }
+        .points-amount.positive {
+            color: var(--success-color);
+        }
+        .points-amount.negative {
+            color: #dc3545;
+        }
+        /* 筛选区域 */
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        /* 积分趋势图表 */
+        .chart-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+            height: 300px;
+        }
+        /* 快速操作按钮 */
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .quick-action-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--dark-text);
+        }
+        .quick-action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,.15);
+            text-decoration: none;
+            color: var(--dark-text);
+        }
+        .quick-action-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .quick-action-btn:nth-child(2) .quick-action-icon {
+            color: var(--points-color);
+        }
+        .quick-action-btn:nth-child(3) .quick-action-icon {
+            color: var(--success-color);
+        }
+        /* 分页样式 */
+        .pagination {
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .page-link {
+            color: var(--primary-color);
+        }
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        /* 页脚样式 */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-pulse-fill"></i> 公共卫生继续医学教育网
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">课程中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learning.html">在线学习</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credits.html">学分管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="points-mall.html">积分商城</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">学术资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experts.html">专家团队</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="practice.html">实践基地</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            个人中心
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">个人信息</a></li>
+                            <li><a class="dropdown-item active" href="points.html">我的积分</a></li>
+                            <li><a class="dropdown-item" href="learning-record.html">学习记录</a></li>
+                            <li><a class="dropdown-item" href="certificates.html">证书管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <span class="user-points">
+                            <i class="bi bi-coin"></i> 1280积分
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">我的积分</h1>
+            <p class="lead">查看积分余额、积分记录和积分趋势</p>
+        </div>
+    </div>
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 快速操作按钮 -->
+        <div class="quick-actions">
+            <a href="points-mall.html" class="quick-action-btn">
+                <i class="bi bi-shop quick-action-icon"></i>
+                <div>积分商城</div>
+                <div class="text-muted">兑换课程、证书、资源</div>
+            </a>
+            <a href="points-recharge.html" class="quick-action-btn">
+                <i class="bi bi-credit-card quick-action-icon"></i>
+                <div>积分充值</div>
+                <div class="text-muted">快速获取积分</div>
+            </a>
+            <a href="points-rules.html" class="quick-action-btn">
+                <i class="bi bi-book quick-action-icon"></i>
+                <div>积分规则</div>
+                <div class="text-muted">了解积分获取与使用</div>
+            </a>
+        </div>
+        <!-- 积分概览 -->
+        <div class="points-overview">
+            <div class="points-balance">
+                <div class="text-muted">当前积分余额</div>
+                <div class="points-balance-number">1,280</div>
+            </div>
+            <div class="points-stats">
+                <div class="points-stat">
+                    <div class="points-stat-number positive">+450</div>
+                    <div class="points-stat-label">本月获得</div>
+                </div>
+                <div class="points-stat">
+                    <div class="points-stat-number negative">-320</div>
+                    <div class="points-stat-label">本月消费</div>
+                </div>
+                <div class="points-stat">
+                    <div class="points-stat-number">+130</div>
+                    <div class="points-stat-label">本月净增</div>
+                </div>
+                <div class="points-stat">
+                    <div class="points-stat-number">900</div>
+                    <div class="points-stat-label">年度赠送</div>
+                </div>
+            </div>
+        </div>
+        <!-- 积分趋势图表 -->
+        <div class="chart-container">
+            <h5 class="mb-3">积分趋势（近30天）</h5>
+            <canvas id="pointsChart"></canvas>
+        </div>
+        <!-- 筛选区域 -->
+        <div class="filter-section">
+            <h5 class="filter-title">筛选条件</h5>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">记录类型</label>
+                    <select class="form-select">
+                        <option selected>全部</option>
+                        <option>获取记录</option>
+                        <option>消费记录</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">时间范围</label>
+                    <select class="form-select">
+                        <option selected>近30天</option>
+                        <option>近90天</option>
+                        <option>近180天</option>
+                        <option>近一年</option>
+                        <option>全部</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">积分来源/用途</label>
+                    <select class="form-select">
+                        <option selected>全部</option>
+                        <option>完成课程学习</option>
+                        <option>参与讨论互动</option>
+                        <option>每日签到</option>
+                        <option>完成任务</option>
+                        <option>内容贡献</option>
+                        <option>参与活动</option>
+                        <option>年度赠送</option>
+                        <option>积分充值</option>
+                        <option>兑换课程</option>
+                        <option>获取证书</option>
+                        <option>兑换资源</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+                    <button class="btn btn-primary w-100">应用筛选</button>
+                </div>
+            </div>
+        </div>
+        <!-- 积分记录导航标签 -->
+        <ul class="nav nav-tabs points-tabs" id="pointsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">全部记录</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button">获取记录</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="expense-tab" data-bs-toggle="tab" data-bs-target="#expense" type="button">消费记录</button>
+            </li>
+        </ul>
+        <!-- 标签内容 -->
+        <div class="tab-content" id="pointsTabsContent">
+            <!-- 全部记录 -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel">
+                <div class="points-table">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>积分变动</th>
+                                <th>余额</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-07-29 14:30</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>完成课程《新发传染病防控策略与技术》</td>
+                                <td class="points-amount positive">+200</td>
+                                <td>1,280</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-28 10:15</td>
+                                <td><span class="points-type expense">消费</span></td>
+                                <td>兑换课程《公共卫生应急管理体系建设》</td>
+                                <td class="points-amount negative">-160</td>
+                                <td>1,080</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-27 09:00</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>每日签到</td>
+                                <td class="points-amount positive">+5</td>
+                                <td>1,240</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-26 16:45</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>参与讨论区互动</td>
+                                <td class="points-amount positive">+15</td>
+                                <td>1,235</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-25 11:20</td>
+                                <td><span class="points-type expense">消费</span></td>
+                                <td>兑换《公共卫生案例集（2025版）》</td>
+                                <td class="points-amount negative">-300</td>
+                                <td>1,220</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-24 14:10</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>完成任务：完善个人信息</td>
+                                <td class="points-amount positive">+20</td>
+                                <td>1,520</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-23 09:30</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>积分充值</td>
+                                <td class="points-amount positive">+500</td>
+                                <td>1,500</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-22 15:25</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>完成课程《健康传播与健康教育技巧》</td>
+                                <td class="points-amount positive">+120</td>
+                                <td>1,000</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-21 10:40</td>
+                                <td><span class="points-type expense">消费</span></td>
+                                <td>获取《健康传播与健康教育技巧》证书</td>
+                                <td class="points-amount negative">-50</td>
+                                <td>880</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-20 09:00</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>年度赠送积分</td>
+                                <td class="points-amount positive">+900</td>
+                                <td>930</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 分页 -->
+                <nav aria-label="积分记录分页">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">上一页</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">10</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">下一页</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- 获取记录 -->
+            <div class="tab-pane fade" id="income" role="tabpanel">
+                <div class="points-table">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>积分变动</th>
+                                <th>余额</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-07-29 14:30</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>完成课程《新发传染病防控策略与技术》</td>
+                                <td class="points-amount positive">+200</td>
+                                <td>1,280</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-27 09:00</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>每日签到</td>
+                                <td class="points-amount positive">+5</td>
+                                <td>1,240</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-26 16:45</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>参与讨论区互动</td>
+                                <td class="points-amount positive">+15</td>
+                                <td>1,235</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-24 14:10</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>完成任务：完善个人信息</td>
+                                <td class="points-amount positive">+20</td>
+                                <td>1,520</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-23 09:30</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>积分充值</td>
+                                <td class="points-amount positive">+500</td>
+                                <td>1,500</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-22 15:25</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>完成课程《健康传播与健康教育技巧》</td>
+                                <td class="points-amount positive">+120</td>
+                                <td>1,000</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-20 09:00</td>
+                                <td><span class="points-type income">获取</span></td>
+                                <td>年度赠送积分</td>
+                                <td class="points-amount positive">+900</td>
+                                <td>930</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 消费记录 -->
+            <div class="tab-pane fade" id="expense" role="tabpanel">
+                <div class="points-table">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>积分变动</th>
+                                <th>余额</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-07-28 10:15</td>
+                                <td><span class="points-type expense">消费</span></td>
+                                <td>兑换课程《公共卫生应急管理体系建设》</td>
+                                <td class="points-amount negative">-160</td>
+                                <td>1,080</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-25 11:20</td>
+                                <td><span class="points-type expense">消费</span></td>
+                                <td>兑换《公共卫生案例集（2025版）》</td>
+                                <td class="points-amount negative">-300</td>
+                                <td>1,220</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-21 10:40</td>
+                                <td><span class="points-type expense">消费</span></td>
+                                <td>获取《健康传播与健康教育技巧》证书</td>
+                                <td class="points-amount negative">-50</td>
+                                <td>880</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>公共卫生继续医学教育网是经国家卫生健康委员会批准成立的全国性公共卫生继续医学教育网络培训平台，致力于提升公共卫生人才队伍素质和能力。</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html">首页</a></li>
+                        <li class="mb-2"><a href="courses.html">课程中心</a></li>
+                        <li class="mb-2"><a href="learning.html">在线学习</a></li>
+                        <li class="mb-2"><a href="credits.html">学分管理</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>积分中心</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="points-mall.html">积分商城</a></li>
+                        <li class="mb-2"><a href="points.html">我的积分</a></li>
+                        <li class="mb-2"><a href="points-rules.html">积分规则</a></li>
+                        <li class="mb-2"><a href="points-recharge.html">积分充值</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="bi bi-geo-alt me-2"></i> 北京市海淀区公共卫生学院路100号</p>
+                    <p><i class="bi bi-telephone me-2"></i> 010-12345678</p>
+                    <p><i class="bi bi-envelope me-2"></i> contact@phe-cme.edu.cn</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="订阅我们的资讯">
+                            <button class="btn btn-primary" type="button">订阅</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center py-3">
+                <p class="mb-0">© 2025 公共卫生继续医学教育网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+            // 积分趋势图表
+            const ctx = document.getElementById('pointsChart').getContext('2d');
+            const pointsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['7月1日', '7月5日', '7月10日', '7月15日', '7月20日', '7月25日', '7月29日'],
+                    datasets: [{
+                        label: '积分余额',
+                        data: [380, 450, 520, 880, 930, 1220, 1280],
+                        borderColor: '#ff6b35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '积分';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // 筛选按钮点击效果
+            const filterButton = document.querySelector('.filter-section .btn-primary');
+            filterButton.addEventListener('click', function() {
+                alert('筛选条件已应用！');
+            });
+            // 订阅表单提交
+            const subscribeBtn = document.querySelector('footer .input-group button');
+            subscribeBtn.addEventListener('click', function() {
+                const emailInput = document.querySelector('footer .input-group input');
+                if (emailInput.value) {
+                    alert('订阅成功！感谢您的关注。');
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
